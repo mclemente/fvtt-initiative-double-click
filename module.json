@@ -8,13 +8,19 @@
   "flags": {},
   "version": "2.6.0",
   "minimumCoreVersion": "0.8.4",
-  "compatibleCoreVersion": "0.8.6",
+  "compatibleCoreVersion": "0.8.8",
   "scripts": [
     "Combat.js"
   ],
   "esmodules": [],
   "styles": [],
-  "languages": [],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "langs/en.json"
+    }
+  ],
   "packs": [],
   "system": [],
   "dependencies": [],

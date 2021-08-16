@@ -1,0 +1,10 @@
+{
+    "initiative-double-click.settings.player-access.name" : "Minimum Permission Level",
+    "initiative-double-click.settings.player-access.hint" : "Allows users with at least this permission level to modify initiative of owned tokens.",
+
+    "initiative-double-click.settings.player-access.roles.none" : "None",
+    "initiative-double-click.settings.player-access.roles.player" : "Player",
+    "initiative-double-click.settings.player-access.roles.trusted" : "Trusted Player",
+    "initiative-double-click.settings.player-access.roles.assistant" : "Assistant GM",
+    "initiative-double-click.settings.player-access.roles.gamemaster" : "Game Master"
+}

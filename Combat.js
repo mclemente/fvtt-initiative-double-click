@@ -1,6 +1,6 @@
 class FurnaceCombatQoL {
     static renderCombatTracker(tracker, html, data) {
-        if (!game.user.isGM) return;
+        if (game.user.role < parseInt(game.settings.get("initiative-double-click","player-access")) ) return;
         html.find(".token-initiative").off("dblclick").on("dblclick", FurnaceCombatQoL._onInitiativeDblClick)
         for (let combatant of html.find("#combat-tracker li.combatant")) {
             if (combatant.classList.contains("active"))
@@ -15,6 +15,7 @@ class FurnaceCombatQoL {
         let cid = html.data("combatant-id")
         let initiative = html.find(".token-initiative")
         let combatant = game.combat.combatants.get(cid)
+        if (!combatant.isOwner) return;
         let input = $(`<input class="initiative" style="width: 90%" value="${combatant.initiative}"/>`)
         initiative.off("dblclick")
         initiative.empty().append(input)
@@ -27,3 +28,20 @@ class FurnaceCombatQoL {
 }
 
 Hooks.on('renderCombatTracker', FurnaceCombatQoL.renderCombatTracker)
+Hooks.once("init", () => {
+    game.settings.register("initiative-double-click", "player-access", {
+        name: game.i18n.localize("initiative-double-click.settings.player-access.name"),
+        hint: game.i18n.localize("initiative-double-click.settings.player-access.hint"),
+        scope: "world",
+        config: true,
+        type: String,
+        default: "4",
+        choices: {
+          "0": "initiative-double-click.settings.player-access.roles.none",
+          "1": "initiative-double-click.settings.player-access.roles.player",
+          "2": "initiative-double-click.settings.player-access.roles.trusted",
+          "3": "initiative-double-click.settings.player-access.roles.assistant",
+          "4": "initiative-double-click.settings.player-access.roles.gamemaster"
+        }
+    });
+});
