@@ -7,7 +7,7 @@
   "url": "https://github.com/League-of-Foundry-Developers/fvtt-initiative-double-click",
   "flags": {},
   "version": "2.6.0",
-  "minimumCoreVersion": "0.8.4",
+  "minimumCoreVersion": "9",
   "compatibleCoreVersion": "9",
   "scripts": [
     "Combat.js"
