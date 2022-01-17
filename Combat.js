@@ -21,7 +21,9 @@ class FurnaceCombatQoL {
 		if (game.user.role < parseInt(game.settings.get("initiative-double-click", "player-access"))) return;
 		const revertButton = game.settings.get("initiative-double-click", "revertButton");
 		const orderButtons = game.settings.get("initiative-double-click", "orderButtons");
-		getInitiatives(html.find("#combat-tracker"));
+		const combatTracker = html.find("#combat-tracker");
+		if (!combatTracker[0].children.length) return;
+		getInitiatives(combatTracker);
 		let TokenInitiative = html.find(".token-initiative");
 
 		if (orderButtons) {
