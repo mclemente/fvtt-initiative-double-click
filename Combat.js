@@ -1,3 +1,5 @@
+import { libWrapper } from "./shim.js";
+
 let CombatantsInitiative = {};
 let firstInitiative = 0;
 let lastInitiative = 0;
@@ -16,6 +18,7 @@ function getInitiatives(combatTracker) {
 		lastInitiative = lastPlace + 1;
 	}
 }
+
 class FurnaceCombatQoL {
 	static renderCombatTracker(tracker, html, data) {
 		if (game.user.role < parseInt(game.settings.get("initiative-double-click", "player-access"))) return;
@@ -139,4 +142,43 @@ Hooks.once("init", () => {
 		type: Boolean,
 		default: false,
 	});
+	game.settings.register("initiative-double-click", "disableOpenSheet", {
+		name: game.i18n.localize("initiative-double-click.settings.disableOpenSheet.name"),
+		hint: game.i18n.localize("initiative-double-click.settings.disableOpenSheet.hint"),
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: true,
+	});
+	libWrapper.register(
+		"initiative-double-click",
+		"CombatTracker.prototype._onCombatantMouseDown",
+		function (wrapped, ...args) {
+			event.preventDefault();
+
+			const li = event.currentTarget;
+			const combatant = this.viewed.combatants.get(li.dataset.combatantId);
+			const token = combatant.token;
+			if (!combatant.actor?.testUserPermission(game.user, "OBSERVED")) return;
+			const now = Date.now();
+
+			// Handle double-left click to open sheet
+			if (!game.settings.get("initiative-double-click", "disableOpenSheet")) {
+				const dt = now - this._clickTime;
+				this._clickTime = now;
+				if (dt <= 250) return combatant.actor?.sheet.render(true);
+			}
+
+			// Control and pan to Token object
+			if (token?.object) {
+				token.object?.control({ releaseOthers: true });
+				if (game.version > 10) {
+					return canvas.animatePan(token.object.center);
+				} else {
+					return canvas.animatePan({ x: token.data.x, y: token.data.y });
+				}
+			}
+		},
+		"OVERRIDE"
+	);
 });

@@ -1,6 +1,10 @@
 {
 	"initiative-double-click": {
 		"settings": {
+			"disableOpenSheet": {
+				"name": "Disable Double-click Opening Sheets",
+				"hint": "Disables the default Foundry behavior of opening a character's when double-clicking it on the Combat Tracker."
+			},
 			"player-access": {
 				"name": "Minimum Permission Level",
 				"hint": "Allows users with at least this permission level to modify initiative of owned tokens."
