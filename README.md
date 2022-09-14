@@ -1,7 +1,5 @@
 # Initiative Double Click
 
-![Initiative Double Click](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FLeague-of-Foundry-Developers%2Fleague-repo-status%2Fshields-endpoint%2Finitiative-double-click.json)
-
 Double click the initiative value in the combat tracker to quickly modify it.
 
 # License
