@@ -153,3 +153,13 @@ Hooks.once("init", () => {
 function numDigits(x) {
 	return (Math.log10((x ^ (x >> 31)) - (x >> 31)) | 0) + 1;
 }
+
+function wrappedOnCombatantMouseDown(wrapped, ...args) {
+	if (event.target.className != "initiative") {
+		wrapped(...args);
+	}
+}
+
+Hooks.once("ready", () => {
+	libWrapper.register("initiative-double-click", "CombatTracker.prototype._onCombatantMouseDown", wrappedOnCombatantMouseDown, "MIXED");
+});
