@@ -3,7 +3,6 @@ import { libWrapper } from "./shim.js";
 let CombatantsInitiative = {};
 let firstInitiative = 0;
 let lastInitiative = 0;
-let disableOpenSheet;
 
 function getInitiatives(combatTracker) {
 	combatTracker = combatTracker[0].children;
@@ -37,12 +36,7 @@ class FurnaceCombatQoL {
 			html.find(".double-click-initiative-first a").on("click", FurnaceCombatQoL._onClickFirst);
 		}
 
-		if (disableOpenSheet) {
-			TokenInitiative.off("dblclick").on("dblclick", FurnaceCombatQoL._onInitiativeDblClick);
-		} else {
-			TokenInitiative.off("pointerdown").on("pointerdown", FurnaceCombatQoL._onPointerDown);
-			TokenInitiative.off("pointerup").on("pointerup", FurnaceCombatQoL._onPointerUp);
-		}
+		TokenInitiative.find('.initiative').on("dblclick", FurnaceCombatQoL._onInitiativeDblClick)
 
 		if (revertButton) {
 			for (let combatant of html.find("#combat-tracker li.combatant")) {
@@ -68,20 +62,6 @@ class FurnaceCombatQoL {
 				<i class="fas fa-arrow-down"></i>
 			</a></div>`);
 			html.find(".double-click-initiative-last a").on("click", FurnaceCombatQoL._onClickLast);
-		}
-	}
-	static _onPointerDown(event) {
-		event.stopPropagation();
-		event.preventDefault();
-		const now = Date.now();
-		const dt = now - this._clickTime;
-		this._clickTime = now;
-	}
-	static _onPointerUp(event) {
-		const now = Date.now();
-		const dt = now - this._clickTime;
-		if (dt >= 500) {
-			FurnaceCombatQoL._changeInitiative(event);
 		}
 	}
 	static _onInitiativeDblClick(event) {
@@ -137,24 +117,6 @@ class FurnaceCombatQoL {
 
 Hooks.on("renderCombatTracker", FurnaceCombatQoL.renderCombatTracker);
 Hooks.once("init", () => {
-	game.settings.register("initiative-double-click", "disableOpenSheet", {
-		name: game.i18n.localize("initiative-double-click.settings.disableOpenSheet.name"),
-		hint: game.i18n.localize("initiative-double-click.settings.disableOpenSheet.hint"),
-		scope: "world",
-		config: true,
-		type: Number,
-		default: true,
-		choices: {
-			0: game.i18n.localize("initiative-double-click.settings.disableOpenSheet.choices.0"),
-			1: game.i18n.localize("initiative-double-click.settings.disableOpenSheet.choices.1"),
-		},
-		onChange: (value) => {
-			disableOpenSheet = value;
-			if (value) libWrapper.register("initiative-double-click", "CombatTracker.prototype._onCombatantMouseDown", wrappedOnCombatantMouseDown, "OVERRIDE");
-			else libWrapper.unregister("initiative-double-click", "CombatTracker.prototype._onCombatantMouseDown");
-			game.combats.render();
-		},
-	});
 	game.settings.register("initiative-double-click", "player-access", {
 		name: game.i18n.localize("initiative-double-click.settings.player-access.name"),
 		hint: game.i18n.localize("initiative-double-click.settings.player-access.hint"),
@@ -188,30 +150,6 @@ Hooks.once("init", () => {
 	});
 });
 
-function wrappedOnCombatantMouseDown(wrapped, ...args) {
-	event.preventDefault();
-
-	const li = event.currentTarget;
-	const combatant = this.viewed.combatants.get(li.dataset.combatantId);
-	const token = combatant.token;
-	if (!combatant.actor?.testUserPermission(game.user, "OBSERVED")) return;
-
-	// Control and pan to Token object
-	if (token?.object) {
-		token.object?.control({ releaseOthers: true });
-		if (game.version > 10) {
-			return canvas.animatePan(token.object.center);
-		} else {
-			return canvas.animatePan({ x: token.data.x, y: token.data.y });
-		}
-	}
-}
-
 function numDigits(x) {
 	return (Math.log10((x ^ (x >> 31)) - (x >> 31)) | 0) + 1;
 }
-
-Hooks.once("ready", () => {
-	disableOpenSheet = game.settings.get("initiative-double-click", "disableOpenSheet");
-	if (disableOpenSheet) libWrapper.register("initiative-double-click", "CombatTracker.prototype._onCombatantMouseDown", wrappedOnCombatantMouseDown, "OVERRIDE");
-});
