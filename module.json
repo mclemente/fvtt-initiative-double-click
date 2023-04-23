@@ -13,7 +13,7 @@
 		}
 	],
 	"url": "https://github.com/League-of-Foundry-Developers/fvtt-initiative-double-click",
-	"version": "1.6",
+	"version": "1.7",
 	"minimumCoreVersion": "0.8.4",
 	"compatibleCoreVersion": "10",
 	"compatibility": {
