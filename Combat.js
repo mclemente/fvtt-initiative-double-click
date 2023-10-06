@@ -5,11 +5,11 @@ let firstInitiative = 0;
 let lastInitiative = 0;
 
 function getInitiatives(combatTracker) {
-	let initiatives = $(combatTracker).find('.initiative');
+	let initiatives = $(combatTracker).find(".initiative");
 	if (!initiatives.length > 0) {
 		return;
 	}
-	
+
 	let firstPlace = Number(initiatives[0].innerText);
 	let lastPlace = Number(initiatives[initiatives.length - 1].innerText);
 	if (firstPlace > lastPlace) {
@@ -38,7 +38,7 @@ class FurnaceCombatQoL {
 			html.find(".double-click-initiative-first a").on("click", FurnaceCombatQoL._onClickFirst);
 		}
 
-		TokenInitiative.find('.initiative').on("dblclick", FurnaceCombatQoL._onInitiativeDblClick)
+		TokenInitiative.find(".initiative").on("dblclick", FurnaceCombatQoL._onInitiativeDblClick);
 
 		if (revertButton) {
 			for (let combatant of html.find("#combat-tracker li.combatant")) {
