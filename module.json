@@ -7,19 +7,12 @@
 			"name": "Matheus Clemente",
 			"discord": "mclemente#5524",
 			"ko-fi": "mclemente"
-		},
-		{
-			"name": "KaKaRoTo"
 		}
 	],
 	"url": "https://github.com/League-of-Foundry-Developers/fvtt-initiative-double-click",
 	"version": "1.7",
-	"minimumCoreVersion": "0.8.4",
-	"compatibleCoreVersion": "10",
-	"compatibility": {
-		"minimum": 9,
-		"verified": "10.277"
-	},
+	"minimumCoreVersion": "11",
+	"compatibleCoreVersion": "11",
 	"esmodules": ["Combat.js"],
 	"styles": ["initiative.css"],
 	"languages": [
