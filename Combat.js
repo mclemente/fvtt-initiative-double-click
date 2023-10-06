@@ -6,11 +6,13 @@ let lastInitiative = 0;
 let disableOpenSheet;
 
 function getInitiatives(combatTracker) {
-	combatTracker = combatTracker[0].children;
-	let firstPlace = combatTracker[0].children;
-	firstPlace = Number(firstPlace[firstPlace.length - 1].innerText);
-	let lastPlace = combatTracker[combatTracker.length - 1];
-	lastPlace = Number(lastPlace.children[lastPlace.children.length - 1].innerText);
+	let initiatives = $(combatTracker).find('.initiative');
+	if (!initiatives.length > 0) {
+		return;
+	}
+	
+	let firstPlace = Number(initiatives[0].innerText);
+	let lastPlace = Number(initiatives[initiatives.length - 1].innerText);
 	if (firstPlace > lastPlace) {
 		firstInitiative = firstPlace + 1;
 		lastInitiative = lastPlace - 1;
