@@ -6,14 +6,6 @@
 			"previous": "Previous Value: {previous}"
 		},
 		"settings": {
-			"disableOpenSheet": {
-				"name": "Click Behavior",
-				"hint": "Sets the module's behavior. \"Double Click\" also disables the default Foundry behavior of opening a character's sheet.",
-				"choices": {
-					"0": "Hold click",
-					"1": "Double click"
-				}
-			},
 			"player-access": {
 				"name": "Minimum Permission Level",
 				"hint": "Allows users with at least this permission level to modify initiative of owned tokens."
