@@ -11,8 +11,10 @@
 	],
 	"url": "https://github.com/League-of-Foundry-Developers/fvtt-initiative-double-click",
 	"version": "1.7",
-	"minimumCoreVersion": "11",
-	"compatibleCoreVersion": "11",
+	"compatibility": {
+		"minimum": "11",
+		"verified": "11"
+	},
 	"esmodules": ["Combat.js"],
 	"styles": ["initiative.css"],
 	"languages": [
