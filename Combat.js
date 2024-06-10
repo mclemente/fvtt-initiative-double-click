@@ -33,53 +33,51 @@ class FurnaceCombatQoL {
 
 		if (orderButtons || revertButton) {
 			TokenInitiative.before("<div class='double-click-initiative flexrow'></div>");
-		}
-		const dblClick = html.find(".double-click-initiative");
+			const dblClick = html.find(".double-click-initiative");
 
-		if (orderButtons) {
-			dblClick.append(`
-				<div class="button double-click-initiative-first"
-					data-tooltip="${game.i18n.localize("initiative-double-click.buttons.top")}"
-					data-tooltip-direction="UP"
-					>
-					<a>
-						<i class="fas fa-arrow-up"></i>
-					</a>
-				</div>
-				<div class="button double-click-initiative-last"
-					data-tooltip="${game.i18n.localize("initiative-double-click.buttons.bottom")}"
-					data-tooltip-direction="UP"
-					>
-					<a>
-						<i class="fas fa-arrow-down"></i>
-					</a>
-				</div>
-				`);
-			html.find(".double-click-initiative-first a").on("click", FurnaceCombatQoL._onClickFirst);
-			html.find(".double-click-initiative-last a").on("click", FurnaceCombatQoL._onClickLast);
-		}
+			if (orderButtons) {
+				dblClick.append(`
+					<div class="button double-click-initiative-first"
+						data-tooltip="${game.i18n.localize("initiative-double-click.buttons.top")}"
+						data-tooltip-direction="UP"
+						>
+						<a>
+							<i class="fas fa-arrow-up"></i>
+						</a>
+					</div>
+					<div class="button double-click-initiative-last"
+						data-tooltip="${game.i18n.localize("initiative-double-click.buttons.bottom")}"
+						data-tooltip-direction="UP"
+						>
+						<a>
+							<i class="fas fa-arrow-down"></i>
+						</a>
+					</div>
+					`);
+				html.find(".double-click-initiative-first a").on("click", FurnaceCombatQoL._onClickFirst);
+				html.find(".double-click-initiative-last a").on("click", FurnaceCombatQoL._onClickLast);
+			}
 
-		TokenInitiative.find(".initiative").on("dblclick", FurnaceCombatQoL._onInitiativeDblClick);
-
-		if (revertButton) {
-			for (let combatant of html.find("#combat-tracker li.combatant")) {
-				const cid = combatant.dataset.combatantId;
-				let div = document.createElement("div");
-				div.classList.add("button", "double-click-initiative-revert");
-				if (CombatantsInitiative[cid]) {
-					div.title = game.i18n.format("initiative-double-click.buttons.previous", { previous: CombatantsInitiative[cid].previous });
-				} else {
-					div.classList.add("double-click-disabled");
+			if (revertButton) {
+				for (let combatant of html.find("#combat-tracker li.combatant")) {
+					const cid = combatant.dataset.combatantId;
+					let div = document.createElement("div");
+					div.classList.add("button", "double-click-initiative-revert");
+					if (CombatantsInitiative[cid]) {
+						div.title = game.i18n.format("initiative-double-click.buttons.previous", { previous: CombatantsInitiative[cid].previous });
+					} else {
+						div.classList.add("double-click-disabled");
+					}
+					let i = document.createElement("i");
+					i.classList.add("fas", "fa-undo");
+					let a = document.createElement("a");
+					a.appendChild(i);
+					div.appendChild(a);
+					if (orderButtons) {
+						combatant.querySelector(".double-click-initiative-last").before(div);
+					} else combatant.querySelector(".double-click-initiative").append(div);
+					html.find(".double-click-initiative-revert a").on("click", FurnaceCombatQoL._onClickRevert);
 				}
-				let i = document.createElement("i");
-				i.classList.add("fas", "fa-undo");
-				let a = document.createElement("a");
-				a.appendChild(i);
-				div.appendChild(a);
-				if (orderButtons) {
-					combatant.querySelector(".double-click-initiative-last").before(div);
-				} else combatant.querySelector(".double-click-initiative").append(div);
-				html.find(".double-click-initiative-revert a").on("click", FurnaceCombatQoL._onClickRevert);
 			}
 		}
 	}
