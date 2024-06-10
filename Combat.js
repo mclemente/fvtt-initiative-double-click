@@ -29,7 +29,12 @@ class FurnaceCombatQoL {
 		const combatTracker = html.find("#combat-tracker");
 		if (!combatTracker[0].children.length) return;
 		getInitiatives(combatTracker);
-		let TokenInitiative = html.find(".token-initiative");
+		const TokenInitiative = html.find(".token-initiative");
+		TokenInitiative.find(".initiative").on("dblclick", FurnaceCombatQoL._onInitiativeDblClick);
+		TokenInitiative.find(".combatant-control.roll").on("contextmenu", (event) => {
+			const cid = event.target.closest(".combatant").dataset.combatantId;
+			game.combat.setInitiative(cid, 0);
+		});
 
 		if (orderButtons || revertButton) {
 			TokenInitiative.before("<div class='double-click-initiative flexrow'></div>");
