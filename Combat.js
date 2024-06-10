@@ -31,11 +31,32 @@ class FurnaceCombatQoL {
 		getInitiatives(combatTracker);
 		let TokenInitiative = html.find(".token-initiative");
 
+		if (orderButtons || revertButton) {
+			TokenInitiative.before("<div class='double-click-initiative flexrow'></div>");
+		}
+		const dblClick = html.find(".double-click-initiative");
+
 		if (orderButtons) {
-			TokenInitiative.before(`<div class="button double-click-initiative-first" title="${game.i18n.localize("initiative-double-click.buttons.top")}"><a>
-				<i class="fas fa-arrow-up"></i>
-			</a></div>`);
+			dblClick.append(`
+				<div class="button double-click-initiative-first"
+					data-tooltip="${game.i18n.localize("initiative-double-click.buttons.top")}"
+					data-tooltip-direction="UP"
+					>
+					<a>
+						<i class="fas fa-arrow-up"></i>
+					</a>
+				</div>
+				<div class="button double-click-initiative-last"
+					data-tooltip="${game.i18n.localize("initiative-double-click.buttons.bottom")}"
+					data-tooltip-direction="UP"
+					>
+					<a>
+						<i class="fas fa-arrow-down"></i>
+					</a>
+				</div>
+				`);
 			html.find(".double-click-initiative-first a").on("click", FurnaceCombatQoL._onClickFirst);
+			html.find(".double-click-initiative-last a").on("click", FurnaceCombatQoL._onClickLast);
 		}
 
 		TokenInitiative.find(".initiative").on("dblclick", FurnaceCombatQoL._onInitiativeDblClick);
@@ -55,15 +76,11 @@ class FurnaceCombatQoL {
 				let a = document.createElement("a");
 				a.appendChild(i);
 				div.appendChild(a);
-				combatant.insertBefore(div, combatant.querySelector(".token-initiative"));
+				if (orderButtons) {
+					combatant.querySelector(".double-click-initiative-last").before(div);
+				} else combatant.querySelector(".double-click-initiative").append(div);
 				html.find(".double-click-initiative-revert a").on("click", FurnaceCombatQoL._onClickRevert);
 			}
-		}
-		if (orderButtons) {
-			TokenInitiative.before(`<div class="button double-click-initiative-last" title="${game.i18n.localize("initiative-double-click.buttons.bottom")}"><a>
-				<i class="fas fa-arrow-down"></i>
-			</a></div>`);
-			html.find(".double-click-initiative-last a").on("click", FurnaceCombatQoL._onClickLast);
 		}
 	}
 	static _onInitiativeDblClick(event) {
@@ -127,7 +144,6 @@ Hooks.once("init", () => {
 		type: String,
 		default: "4",
 		choices: {
-			0: "USER.RoleNone",
 			1: "USER.RolePlayer",
 			2: "USER.RoleTrusted",
 			3: "USER.RoleAssistant",
@@ -141,6 +157,7 @@ Hooks.once("init", () => {
 		config: true,
 		type: Boolean,
 		default: false,
+		requiresReload: true,
 	});
 	game.settings.register("initiative-double-click", "orderButtons", {
 		name: game.i18n.localize("initiative-double-click.settings.orderButtons.name"),
@@ -149,6 +166,7 @@ Hooks.once("init", () => {
 		config: true,
 		type: Boolean,
 		default: false,
+		requiresReload: true,
 	});
 });
 
@@ -156,9 +174,9 @@ function numDigits(x) {
 	return (Math.log10((x ^ (x >> 31)) - (x >> 31)) | 0) + 1;
 }
 
-function wrappedOnCombatantMouseDown(wrapped, ...args) {
-	if (event.target.className != "initiative") {
-		wrapped(...args);
+function wrappedOnCombatantMouseDown(wrapped, event) {
+	if (event.target.className !== "initiative") {
+		wrapped(event);
 	}
 }
 
