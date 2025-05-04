@@ -1,5 +1,5 @@
 {
-	"id": "initiative-double-click"
+	"id": "initiative-double-click",
 	"title": "Initiative Double Click",
 	"description": "Double click the initiative value in the combat tracker to quickly modify it.",
 	"authors": [
