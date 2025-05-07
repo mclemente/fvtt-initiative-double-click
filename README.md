@@ -1,3 +1,7 @@
+# ARCHIVED
+
+Since Foundry V13, this module is no longer necessary.
+
 # Initiative Double Click
 
 Double click the initiative value in the combat tracker to quickly modify it.
